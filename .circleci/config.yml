@@ -81,13 +81,20 @@ jobs:
           steps:
             - run: echo "Branche Master ==> On va conteneuriser et envoyer vers DockerHub"
 
-  build-docker-image:
+build-docker-image:
     executor: my-machine
     steps:
       - checkout
       - run:
           name: Build Docker image
-          command: docker build -t circleci-heroku-jed:$CIRCLE_SHA1 .
+          command: docker build -t $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1 .
+      - run:
+          name: Push Docker Image
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME"
+            docker tag $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1 $DOCKERHUB_USERNAME/oc-lettings:lastest
+            docker push $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1
+            docker push $DOCKERHUB_USERNAME/oc-lettings:lastest
 
   deploy:
     machine: true
