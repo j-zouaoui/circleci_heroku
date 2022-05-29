@@ -81,7 +81,7 @@ jobs:
           steps:
             - run: echo "Branche Master ==> On va conteneuriser et envoyer vers DockerHub"
 
-build-docker-image:
+  build-docker-image:
     executor: my-machine
     steps:
       - checkout
@@ -95,7 +95,6 @@ build-docker-image:
             docker tag $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1 $DOCKERHUB_USERNAME/oc-lettings:lastest
             docker push $DOCKERHUB_USERNAME/oc-lettings:$CIRCLE_SHA1
             docker push $DOCKERHUB_USERNAME/oc-lettings:lastest
-
   deploy:
     machine: true
     steps:
